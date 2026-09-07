@@ -201,19 +201,19 @@ public class SwiftDeviceCalendarPlugin: NSObject, FlutterPlugin, EKEventViewDele
     private func getSource() -> EKSource? {
       let localSources = eventStore.sources.filter { $0.sourceType == .local }
 
+            let iCloudSources = eventStore.sources.filter { $0.sourceType == .calDAV && $0.title == "iCloud" }
+
+            if (!iCloudSources.isEmpty) {
+                return iCloudSources.first
+            }
+            
             if (!localSources.isEmpty) {
                 return localSources.first
             }
 
             if let defaultSource = eventStore.defaultCalendarForNewEvents?.source {
                 return defaultSource
-            }
-
-            let iCloudSources = eventStore.sources.filter { $0.sourceType == .calDAV && $0.sourceIdentifier == "iCloud" }
-
-            if (!iCloudSources.isEmpty) {
-                return iCloudSources.first
-            }
+            }            
 
             return nil
         }
